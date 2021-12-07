@@ -17,19 +17,13 @@ class DBM:
     def test_simple(self,nuc_agr,nom_nuc,clave_nuc):
         if not self.validator:
             if nuc_agr == nom_nuc:
-                print("accepted")
                 self.clave = clave_nuc
-        else:
-            pass
     
     def test_eliminateNull(self,element):
         if not self.validator:
             if element in self.inputs['nulos']:
                 self.validator = True
                 self.clave = '0'
-                print("eliminated")
-        else:
-            pass
 
     def test_subset(self,nuc_agr,nom_nuc,clave_nuc):
         if not self.validator:
@@ -39,9 +33,6 @@ class DBM:
             if nuc_agr.issubset(nom_nuc) or nom_nuc.issubset(nuc_agr):
                 self.clave = clave_nuc
                 self.validator = True
-                print("accepted")
-        else:
-            pass
     
     def test_removeStuff(self,nuc_agr,nom_nuc,clave_nuc):
         nuc_agr = nuc_agr.split()
@@ -80,7 +71,9 @@ class DBM:
         #Para cada una de las filas de PPB (base a clasificar)
         #match: NUCLEO_AGRARIO-- Regresa: Clave
         claves = []
+        n = len(self.ppb)
         for index, ppb_row in self.ppb.iterrows():
+            print(f'missing: {n}')
             self.validator = False
             self.clave = 'not classified'
             nuc_agr = str(ppb_row['NUCLEO_AGRARIO'])
@@ -88,18 +81,26 @@ class DBM:
                 #a. test_eliminateNull()
             self.test_eliminateNull(nuc_agr)
                 #b. Comparar Municipios;
-            for index, nuc_row in self.nucleo.iterrows():
-                    #b. True: Comparar NUCLEO_AGRARIO con NOM_NUC (prueba 5v); True traer clave
-                    nom_nuc = str(nuc_row['NOM_NUC'])
-                    clave_nuc = str(nuc_row['CLAVE'])
+            if not self.validator:
+                for index, nuc_row in self.nucleo.iterrows():
+                        #b. True: Comparar NUCLEO_AGRARIO con NOM_NUC (prueba 5v); True traer clave
+                        nom_nuc = str(nuc_row['NOM_NUC'])
+                        clave_nuc = str(nuc_row['CLAVE'])
 
-                    self.test_simple(nuc_agr,nom_nuc,clave_nuc)
-                    self.test_removeStuff(nuc_agr,nom_nuc,clave_nuc)
-                        #   False: compare_localidades()
-                            #   False: Guardar como Error1
-                    #b. False-. compare_localidades()
-                            #   False: Guardar como Error2
+                        self.test_simple(nuc_agr,nom_nuc,clave_nuc)
+                        self.test_removeStuff(nuc_agr,nom_nuc,clave_nuc)
+                            #   False: compare_localidades()
+                                #   False: Guardar como Error1
+                        #b. False-. compare_localidades()
+                                #   False: Guardar como Error2
+            
+            #se terminan los tests y se guarda la clave
+            if self.clave == 'not classified':
+                print(self.clave)
+            else:
+                print("classified")
             claves.append(self.clave)
+            n = n-1
         self.ppb['clave_'] = claves
 
                             
