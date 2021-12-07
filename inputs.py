@@ -1,3 +1,4 @@
+# -*- coding: latin-1 -*-
 db_Inputs = {
     'nombre_nucleo': 'NA_chiapas',
     'nombre_ppb': 'chiapas',

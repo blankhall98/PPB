@@ -1,3 +1,4 @@
+# -*- coding: latin-1 -*-
 import pandas as pd
 import numpy as np
 
@@ -9,9 +10,9 @@ class DBM:
     # Load PPB,NUC and LOC databases
     def load_data(self):
         ext = self.db_inputs['extension']
-        self.nucleo = pd.read_excel(self.db_inputs['ruta_nuc']+self.db_inputs['nombre_nucleo']+ext,encoding='latin-1')
-        self.ppb = pd.read_excel(self.db_inputs['ruta_ppb']+self.db_inputs['nombre_ppb']+ext,encoding='latin-1')
-        self.local = pd.read_excel(self.db_inputs['ruta_loc']+self.db_inputs['nombre_loc']+ext,encoding='latin-1')
+        self.nucleo = pd.read_excel(self.db_inputs['ruta_nuc']+self.db_inputs['nombre_nucleo']+ext)
+        self.ppb = pd.read_excel(self.db_inputs['ruta_ppb']+self.db_inputs['nombre_ppb']+ext)
+        self.local = pd.read_excel(self.db_inputs['ruta_loc']+self.db_inputs['nombre_loc']+ext)
     
     #Compara uno a uno 
     def test_simple(self,nuc_agr,nom_nuc,clave_nuc):
@@ -59,7 +60,7 @@ class DBM:
     def save_database(self):
         save_route = self.db_Inputs['ruta_merge']+self.db_Inputs['nombre_ppb']+'.csv'
         self.ppb.to_csv(save_route,encoding='latin-1')
-        print(f'Database {self.ppb_name} has been saved with success at {save_route}')
+        print('Database has been saved with success at: '+ str(save_route))
     
     def performance(self,test_row):
         print(test_row.count())
@@ -73,7 +74,7 @@ class DBM:
         claves = []
         n = len(self.ppb)
         for index, ppb_row in self.ppb.iterrows():
-            print(f'missing: {n}')
+            print("missing"+str(n))
             self.validator = False
             self.clave = 'not classified'
             nuc_agr = str(ppb_row['NUCLEO_AGRARIO'])
@@ -84,8 +85,8 @@ class DBM:
             if not self.validator:
                 for index, nuc_row in self.nucleo.iterrows():
                         #b. True: Comparar NUCLEO_AGRARIO con NOM_NUC (prueba 5v); True traer clave
-                        nom_nuc = str(nuc_row['NOM_NUC'])
-                        clave_nuc = str(nuc_row['CLAVE'])
+                        nom_nuc = str(nuc_row['NOM_NUC'].encode('latin-1'))
+                        clave_nuc = str(nuc_row['CLAVE'].encode('latin-1'))
 
                         self.test_simple(nuc_agr,nom_nuc,clave_nuc)
                         self.test_removeStuff(nuc_agr,nom_nuc,clave_nuc)
