@@ -8,7 +8,7 @@ db_Inputs = {
     'ruta_nuc': './nuc/',
     'ruta_ppb': './ppb/',
     'ruta_loc': './loc/',
-    'ruta_merge': './data_merged/',
+    'ruta_merge': './merged_data/',
     'extension': '.xlsx'
     }
 
